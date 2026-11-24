@@ -46,24 +46,27 @@
 <form id="bookForm" novalidate>
 
 <div class="book-step active" data-step="1">
-<h2 style="margin-bottom:14px">What's the problem?</h2>
+<h2 style="margin-bottom:14px">Which appliance has the problem?</h2>
 <div class="pick-grid">
-<button type="button" class="pick-card" data-pick="problem" data-value="No heat"><span class="picon" data-icon="flame"></span><span><b>No heat</b><span>Furnace off, blowing cold, or won't start</span></span></button>
-<button type="button" class="pick-card" data-pick="problem" data-value="No cooling"><span class="picon" data-icon="snow"></span><span><b>No cooling</b><span>AC running but the house stays warm</span></span></button>
-<button type="button" class="pick-card" data-pick="problem" data-value="Strange noise"><span class="picon" data-icon="bolt"></span><span><b>Strange noise</b><span>Banging, rattling, squealing or buzzing</span></span></button>
-<button type="button" class="pick-card" data-pick="problem" data-value="Leak"><span class="picon" data-icon="air"></span><span><b>Leak</b><span>Water around the unit or dripping</span></span></button>
-<button type="button" class="pick-card" data-pick="problem" data-value="Something else"><span class="picon" data-icon="wrench"></span><span><b>Something else</b><span>Not sure — a technician will diagnose it</span></span></button>
+<button type="button" class="pick-card" data-pick="appliance" data-value="Furnace / Boiler"><span class="picon" data-icon="flame"></span><span><b>Furnace / Boiler</b><span>Heating for the whole home</span></span></button>
+<button type="button" class="pick-card" data-pick="appliance" data-value="Water Heater"><span class="picon"><svg viewBox="0 0 48 48" fill="none" stroke="#1B9BD1" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M24 5s13 15.5 13 26a13 13 0 0 1-26 0C11 20.5 24 5 24 5z"/><path d="M18 31a6 6 0 0 0 6 6"/></svg></span><span><b>Water Heater</b><span>Hot water for showers &amp; taps</span></span></button>
+<button type="button" class="pick-card" data-pick="appliance" data-value="Air Conditioner"><span class="picon" data-icon="snow"></span><span><b>Air Conditioner</b><span>Cooling for the whole home</span></span></button>
+<button type="button" class="pick-card" data-pick="appliance" data-value="Heat Pump"><span class="picon" data-icon="air"></span><span><b>Heat Pump</b><span>Heats and cools in one unit</span></span></button>
+<button type="button" class="pick-card" data-pick="appliance" data-value="Thermostat"><span class="picon" data-icon="thermostat"></span><span><b>Thermostat</b><span>The wall control for heating &amp; cooling</span></span></button>
+<button type="button" class="pick-card" data-pick="appliance" data-value="Something else"><span class="picon" data-icon="wrench"></span><span><b>Something else</b><span>Not sure — tell us in your own words</span></span></button>
 </div>
-<p class="error" id="problemError" style="display:none;color:var(--red);font-weight:600;margin-top:10px">Please pick the problem that fits best.</p>
+<p class="error" id="applianceError" style="display:none;color:var(--red);font-weight:600;margin-top:10px">Please pick the appliance first.</p>
 
-<h3 style="margin:24px 0 10px">Which appliance?</h3>
-<div class="chip-row big">
-<button type="button" class="chip" data-pick="appliance" data-value="Furnace">Furnace</button>
-<button type="button" class="chip" data-pick="appliance" data-value="Air conditioner">Air conditioner</button>
-<button type="button" class="chip" data-pick="appliance" data-value="Heat pump">Heat pump</button>
-<button type="button" class="chip" data-pick="appliance" data-value="Water heater">Water heater</button>
-<button type="button" class="chip" data-pick="appliance" data-value="Thermostat">Thermostat</button>
-<button type="button" class="chip" data-pick="appliance" data-value="Don't know">Don't know</button>
+<div id="problemSection" style="display:none">
+<h3 style="margin:24px 0 10px">What's happening with it?</h3>
+<div class="pick-grid" id="problemGrid"></div>
+<p class="error" id="problemError" style="display:none;color:var(--red);font-weight:600;margin-top:10px">Please pick the problem that fits best.</p>
+</div>
+
+<div class="field" id="problemOtherWrap" style="display:none;margin-top:18px">
+<label for="bkProblemOther">Tell us what's wrong *</label>
+<textarea id="bkProblemOther" rows="2" placeholder="e.g. There is a burning smell when the heat starts"></textarea>
+<span class="error">Please add a few words about the problem.</span>
 </div>
 
 <h3 style="margin:24px 0 10px">Nameplate photo <span class="optional-tag">Optional</span></h3>
@@ -77,28 +80,29 @@
 
 <div class="book-step" data-step="2">
 <h2 style="margin-bottom:14px">Where &amp; when?</h2>
+<div class="field"><label for="bkPostal">Postal code *</label><input type="text" id="bkPostal" autocomplete="postal-code" placeholder="L4C 1A1" style="text-transform:uppercase"><span class="error">Please enter a valid postal code.</span>
+<p class="area-found" id="areaFound" style="display:none"></p></div>
 <div class="grid cols-2" style="gap:14px">
 <div class="field"><label for="bkCity">City *</label><select id="bkCity"><option value="">Select…</option><option>Richmond Hill</option><option>Markham</option><option>Toronto</option><option>Vaughan</option><option>Scarborough</option><option>North York</option><option>Other</option></select><span class="error">Please pick your city.</span></div>
-<div class="field"><label for="bkPostal">Postal code *</label><input type="text" id="bkPostal" autocomplete="postal-code" placeholder="L4C 1A1" style="text-transform:uppercase"><span class="error">Please enter a valid postal code.</span></div>
+<div class="field"><label for="bkAddress">Street address *</label><input type="text" id="bkAddress" autocomplete="street-address" placeholder="123 Bayview Ave"><span class="hint" id="addressHint">Your city fills in from the postal code — we just need your street.</span><span class="error">Please enter the service address.</span></div>
 </div>
-<div class="field"><label for="bkDate">Day *</label><input type="date" id="bkDate"><span class="error">Please pick a day.</span></div>
-<div class="field"><label>Time *</label>
-<div class="chip-row big">
-<button type="button" class="chip" data-pick="time" data-value="As soon as possible">As soon as possible</button>
-<button type="button" class="chip" data-pick="time" data-value="Morning (8–12)">Morning (8–12)</button>
-<button type="button" class="chip" data-pick="time" data-value="Afternoon (12–4)">Afternoon (12–4)</button>
-<button type="button" class="chip" data-pick="time" data-value="Evening (4–8)">Evening (4–8)</button>
-</div>
-<span class="error" id="timeError" style="display:none">Please pick a time window.</span></div>
+
+<div class="field" style="margin-top:6px"><label>Pick a day &amp; time *</label>
+<p class="book-with" id="bookWith"></p>
+<div class="day-strip" id="dayStrip"></div>
+<div class="chip-row big" id="slotRow" style="margin-top:12px"></div>
+<span class="error" id="slotError" style="display:none">Please pick a day and a free time slot.</span></div>
 
 <div class="estimate-card">
 <h3>Your estimate</h3>
-<div class="summary-row"><span>Diagnostic visit</span><span id="estDiag">$89.00</span></div>
+<div class="summary-row"><span id="estDiagName">Diagnostic visit</span><span id="estDiag">—</span></div>
+<div class="summary-row"><span>Likely repair <span class="hint">(estimate)</span></span><span id="estRepair">Pick appliance &amp; problem</span></div>
 <div class="summary-row"><span>Distance fee</span><span id="estFee">Enter postal code</span></div>
-<div class="summary-row"><span>HST (13%)</span><span id="estHst">$11.57</span></div>
-<div class="summary-row total"><span>Due at the visit</span><span id="estTotal">$100.57</span></div>
-<p class="hint" id="estNote" style="margin-top:10px">Add your postal code and the distance fee (if any) appears here — no surprises later.</p>
-<p class="hint">The repair itself is quoted on site, and the <b>price is confirmed before any work starts</b>.</p>
+<div class="summary-row"><span>HST (13%)</span><span id="estHst">—</span></div>
+<div class="summary-row total"><span>Due at the visit</span><span id="estTotal">—</span></div>
+<p class="hint" id="estParts" style="margin-top:10px"></p>
+<p class="hint" id="estNote">Add your postal code and the distance fee (if any) appears here — no surprises later.</p>
+<p class="hint">The repair range is an estimate — the exact price is <b>confirmed before any work starts</b>.</p>
 </div>
 <div class="book-nav"><button type="button" class="btn dark" data-back>← Back</button><button type="button" class="btn" data-next>Continue →</button></div>
 </div>
@@ -107,7 +111,6 @@
 <h2 style="margin-bottom:14px">Your details</h2>
 <div class="field"><label for="bkName">Full name *</label><input type="text" id="bkName" autocomplete="name"><span class="error">Please enter your name.</span></div>
 <div class="field"><label for="bkPhone">Phone *</label><input type="tel" id="bkPhone" autocomplete="tel" placeholder="(416) 555-0123"><span class="error">Please enter a valid phone number.</span></div>
-<div class="field"><label for="bkAddress">Street address *</label><input type="text" id="bkAddress" autocomplete="street-address"><span class="error">Please enter the service address.</span></div>
 <p class="hint">We text your technician's name and arrival window to this phone.</p>
 <div class="book-nav"><button type="button" class="btn dark" data-back>← Back</button><button type="submit" class="btn">Confirm Booking ✓</button></div>
 </div>
@@ -116,14 +119,28 @@
 <div class="success-box">
 <div class="tick"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 25l11 11L39 14"/></svg></div>
 <h2>You're booked!</h2>
-<p>Booking reference <b id="bookingRef">FV-000000</b><br><span id="confirmSummary"></span></p>
+<p>Booking reference <b id="bookingRef">FV-000000</b></p>
+<div class="confirm-lines">
+<div class="summary-row"><span>Service</span><b id="confirmSummary"></b></div>
+<div class="summary-row"><span>Address</span><b id="confirmAddress"></b></div>
+<div class="summary-row"><span>When</span><b id="confirmWhen"></b></div>
+</div>
 <div class="tech-card">
 <span class="avatar" id="techAvatar">AR</span>
 <span><h3>Your technician: <span id="techName">Alex R.</span></h3>
 <p id="techMeta">★ 4.9 · 312 jobs done</p>
 <p id="techWindow">Arriving soon</p></span>
 </div>
-<p style="color:var(--muted)">Estimated total due at the visit: <b id="confirmTotal">$0.00</b>. The final repair price is <b>confirmed before work starts</b> — you pay after the job is done.<br>Questions? Call <a href="tel:+19055550134"><b>(905) 555-0134</b></a> — answered 24/7.</p>
+<div class="estimate-card" style="text-align:left">
+<h3>Your estimate</h3>
+<div class="summary-row"><span>Diagnostic visit</span><span id="cVisit"></span></div>
+<div class="summary-row"><span>Likely repair (estimate)</span><span id="cRepair"></span></div>
+<div class="summary-row"><span>Distance fee</span><span id="cFee"></span></div>
+<div class="summary-row total"><span>Due at the visit</span><span id="confirmTotal"></span></div>
+<p class="hint" id="cParts" style="margin-top:10px"></p>
+<p class="hint">The final repair price is <b>confirmed before work starts</b> — you pay after the job is done.</p>
+</div>
+<p style="color:var(--muted)">Questions? Call <a href="tel:+19055550134"><b>(905) 555-0134</b></a> — answered 24/7.</p>
 <a class="btn dark" href="index.html">Back to Home</a>
 </div></div>
 
@@ -145,6 +162,7 @@
 <script src="assets/js/products.js"></script>
 <script src="assets/js/cart.js"></script>
 <script src="assets/js/main.js"></script>
+<script src="assets/js/jobs.js"></script>
 <script src="assets/js/book.js"></script>
 
 </body>
