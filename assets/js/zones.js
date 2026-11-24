@@ -40,3 +40,21 @@ function fvCheckPostal(raw) {
     fee: inZone ? 0 : FV_DISTANCE_FEE_PER_HOUR
   };
 }
+
+/* ---- v2: three-state status for the checker widgets ----
+   'free'     → inside the Richmond Hill / Markham free zone
+   'fee'      → served GTA area, $17/hr distance fee applies
+   'waitlist' → a real postal code, but not a city we serve yet  */
+var FV_FEE_AREA_FSAS = ['L4A', 'L4G', 'L4H', 'L7B']; /* Stouffville, Aurora, Vaughan, King City */
+function fvZoneStatus(raw) {
+  var n = fvNormalizePostal(raw);
+  if (!n.valid) return { valid: false, status: 'invalid', fsa: '', pretty: '', fee: 0 };
+  if (FV_IN_ZONE_FSAS.indexOf(n.fsa) !== -1) {
+    return { valid: true, status: 'free', fsa: n.fsa, pretty: n.pretty, fee: 0 };
+  }
+  var servedGta = n.fsa.charAt(0) === 'M' || FV_FEE_AREA_FSAS.indexOf(n.fsa) !== -1;
+  if (servedGta) {
+    return { valid: true, status: 'fee', fsa: n.fsa, pretty: n.pretty, fee: FV_DISTANCE_FEE_PER_HOUR };
+  }
+  return { valid: true, status: 'waitlist', fsa: n.fsa, pretty: n.pretty, fee: 0 };
+}

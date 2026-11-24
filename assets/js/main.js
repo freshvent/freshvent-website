@@ -1,5 +1,5 @@
 /* ============================================================
-   FreshVent — shared site behaviour
+   FreshVent v2 — shared site behaviour
    (nav, icons, shop grid, postal checker, FAQ, forms)
    ============================================================ */
 
@@ -19,7 +19,10 @@ var FV_ICON_PATHS = {
   check: '<path d="M8 25l11 11L40 13"/>',
   bolt: '<path d="M27 3L8 28h12l-2 17 19-25H25z"/>',
   calendar: '<rect x="6" y="9" width="36" height="34" rx="4"/><path d="M6 19h36M16 4v9M32 4v9"/>',
-  card: '<rect x="4" y="10" width="40" height="28" rx="4"/><path d="M4 19h40M9 31h10"/>'
+  card: '<rect x="4" y="10" width="40" height="28" rx="4"/><path d="M4 19h40M9 31h10"/>',
+  wrench: '<path d="M31 5a9.5 9.5 0 0 0-6.4 16.4L7 39a4.24 4.24 0 1 0 6 6l17.6-17.6A9.5 9.5 0 0 0 43 21l-6.5 6.5-6-2-2-6z"/>',
+  home: '<path d="M6 22L24 6l18 16M11 19v21h26V19"/>',
+  hardhat: '<path d="M13 33v-6.5C13 19 17.5 13.5 24 12.5V6h0v6.5C30.5 13.5 35 19 35 26.5V33M6 33h36v7H6z"/>'
 };
 function fvIconSvg(key) {
   var p = FV_ICON_PATHS[key] || FV_ICON_PATHS.part;
@@ -81,32 +84,55 @@ document.addEventListener('DOMContentLoaded', function () {
     renderShop();
   }
 
-  /* ---------- postal-code checker widgets ---------- */
+  /* ---------- postal-code checker widgets ----------
+     data-zone-form="cart" → saves the postal code + cart fee (v1 behaviour).
+     Any other value → three-state message: free / fee / not-yet (waitlist). */
   document.querySelectorAll('[data-zone-form]').forEach(function (form) {
     var input = form.querySelector('[data-zone-input]');
     var result = form.parentElement.querySelector('[data-zone-result]');
-    var saveToCart = form.getAttribute('data-zone-form') === 'cart';
-    if (saveToCart && input && fvSavedPostal()) input.value = fvSavedPostal();
+    var isCart = form.getAttribute('data-zone-form') === 'cart';
+    if (isCart && input && fvSavedPostal()) input.value = fvSavedPostal();
     form.addEventListener('submit', function (e) {
       e.preventDefault();
-      var check = fvCheckPostal(input.value);
-      if (saveToCart) {
+      if (!input || !result) return;
+      result.className = 'zone-result';
+      if (isCart) {
+        var check = fvCheckPostal(input.value);
         fvSavePostal(check.valid ? check.pretty : '');
         if (typeof fvCartRenderPage === 'function') fvCartRenderPage();
+        if (!check.valid) {
+          result.classList.add('bad');
+          result.textContent = 'Please enter a valid Canadian postal code (e.g., L4C 1A1).';
+        } else if (check.inZone) {
+          result.classList.add('ok');
+          result.textContent = 'Good news — ' + check.pretty + ' is inside our free service zone (Richmond Hill / Markham). No distance fee applies.';
+        } else {
+          result.classList.add('fee');
+          result.textContent = check.pretty + ' is outside the free zone. A distance fee of $17.00/hr will be added to your cart automatically.';
+        }
+        return;
       }
-      if (!result) return;
-      result.className = 'zone-result';
-      if (!check.valid) {
+      var st = fvZoneStatus(input.value);
+      if (!st.valid) {
         result.classList.add('bad');
         result.textContent = 'Please enter a valid Canadian postal code (e.g., L4C 1A1).';
-      } else if (check.inZone) {
+      } else if (st.status === 'free') {
         result.classList.add('ok');
-        result.textContent = 'Good news — ' + check.pretty + ' is inside our free service zone (Richmond Hill / Markham). No distance fee applies.';
+        result.textContent = 'Good news — ' + st.pretty + ' is in our free zone. No distance fee, ever.';
+      } else if (st.status === 'fee') {
+        result.classList.add('fee');
+        result.textContent = 'We serve ' + st.pretty + ' — a $17.00/hr distance fee applies and is always shown before you pay.';
       } else {
         result.classList.add('fee');
-        result.textContent = check.pretty + ' is outside the free zone. A distance fee of $17.00/hr will be added to your cart automatically.';
+        result.innerHTML = 'We don\'t serve ' + st.pretty + ' yet — we\'re expanding city by city. ' +
+          '<a href="service-area.html#waitlist"><b>Join the waitlist</b></a> and we\'ll tell you the moment we arrive.';
       }
     });
+  });
+
+  /* ---------- plans page: Choose-plan buttons add the first month to the cart ---------- */
+  document.querySelectorAll('[data-plan-add]').forEach(function (b) {
+    b.addEventListener('click', function () { fvCartAdd(b.getAttribute('data-plan-add')); });
   });
 
   /* ---------- FAQ accordion ---------- */
@@ -132,27 +158,53 @@ document.addEventListener('DOMContentLoaded', function () {
     });
   }
 
-  /* ---------- contact form (front-end only) ---------- */
-  var cform = document.getElementById('contactForm');
-  if (cform) {
-    cform.addEventListener('submit', function (e) {
+  /* ---------- generic front-end-only forms with a success box ---------- */
+  function demoForm(formId, successId) {
+    var f = document.getElementById(formId);
+    if (!f) return;
+    f.addEventListener('submit', function (e) {
       e.preventDefault();
-      /* TODO: wire this form to the production endpoint (Web3Forms/FormSubmit) */
-      var ok = document.getElementById('contactSuccess');
+      /* TODO: wire this form to the production endpoint (Web3Forms/FormSubmit) + CRM. */
+      var ok = document.getElementById(successId);
       if (ok) { ok.style.display = 'block'; ok.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
-      cform.reset();
+      f.reset();
     });
   }
+  demoForm('contactForm', 'contactSuccess');
+  demoForm('waitlistForm', 'waitlistSuccess');
+  demoForm('branchForm', 'branchSuccess');
 
-  /* ---------- partner application form (front-end only) ---------- */
-  var pform = document.getElementById('partnerForm');
-  if (pform) {
-    pform.addEventListener('submit', function (e) {
+  /* ---------- technician join form (partners.html) ----------
+     No account, no password: save the profile locally and go
+     straight to the technician dashboard.
+     TODO: POST the profile to the production endpoint + CRM. */
+  var join = document.getElementById('joinForm');
+  if (join) {
+    join.addEventListener('submit', function (e) {
       e.preventDefault();
-      /* TODO: wire this form to the production endpoint (Web3Forms/FormSubmit) + CRM */
-      var ok = document.getElementById('partnerSuccess');
-      if (ok) { ok.style.display = 'block'; ok.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
-      pform.reset();
+      var get = function (id) { var el = document.getElementById(id); return el ? el.value.trim() : ''; };
+      var bad = function (id, isBad) {
+        var el = document.getElementById(id);
+        var field = el && el.closest('.field');
+        if (field) field.classList.toggle('invalid', isBad);
+        return !isBad;
+      };
+      var ok = true;
+      ok = bad('pfName', !get('pfName')) && ok;
+      ok = bad('pfPhone', get('pfPhone').replace(/\D/g, '').length < 10) && ok;
+      ok = bad('pfCity', !get('pfCity')) && ok;
+      ok = bad('pfTrade', !get('pfTrade')) && ok;
+      if (!ok) return;
+      var profile = {
+        name: get('pfName'),
+        phone: get('pfPhone'),
+        city: get('pfCity'),
+        trade: get('pfTrade'),
+        years: get('pfYears'),
+        joined: new Date().toISOString()
+      };
+      try { localStorage.setItem('freshvent:tech', JSON.stringify(profile)); } catch (err) {}
+      window.location.href = 'dashboard.html';
     });
   }
 });

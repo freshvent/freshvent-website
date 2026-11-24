@@ -35,3 +35,15 @@ var FV_PRODUCTS = [
   { id: 'svc-duct-clean', name: 'Duct Cleaning — Up to 10 Vents', category: 'Services', price: 299.00, icon: 'air',
     blurb: 'Full supply and return duct cleaning with a high-powered vacuum system. Additional vents $15 each.' }
 ];
+
+/* ---- Appliance protection plans (see plans.html) ----
+   Adding a plan to the cart charges the FIRST MONTH only;
+   the plan then renews monthly and can be cancelled anytime. */
+FV_PRODUCTS.push(
+  { id: 'plan-essential', name: 'Protection Plan — Essential (first month)', category: 'Plans', price: 19.99, icon: 'shield',
+    blurb: 'Furnace + AC breakdown protection. Renews at $19.99/mo after the first month — cancel anytime.' },
+  { id: 'plan-plus', name: 'Protection Plan — Plus (first month)', category: 'Plans', price: 29.99, icon: 'shield',
+    blurb: 'HVAC + major appliances (fridge, washer, dryer, stove). Renews at $29.99/mo — cancel anytime.' },
+  { id: 'plan-whole-home', name: 'Protection Plan — Whole Home (first month)', category: 'Plans', price: 44.99, icon: 'shield',
+    blurb: 'Everything in Plus + plumbing and electrical basics. Renews at $44.99/mo — cancel anytime.' }
+);
