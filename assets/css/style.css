@@ -375,3 +375,18 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--cyan);border-col
 .job-side{display:flex;align-items:center;gap:16px}
 .job-price{font-size:1.45rem;font-weight:800;color:var(--navy)}
 .job-done-tag{color:var(--green);font-weight:700}
+
+/* ---------- booking: postal-first + availability calendar ---------- */
+.area-found{margin-top:10px;background:#E5F6EE;color:#14663F;border-radius:10px;padding:10px 14px;font-weight:600;font-size:.92rem}
+.book-with{font-weight:700;color:var(--navy);margin:2px 0 10px}
+.day-strip{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
+@media(max-width:640px){.day-strip{grid-template-columns:repeat(4,1fr)}}
+.day-card{border:1.5px solid var(--line);background:#fff;border-radius:12px;padding:10px 4px;text-align:center;cursor:pointer;font:inherit}
+.day-card b{display:block;color:var(--navy);font-size:.95rem}
+.day-card span{display:block;color:var(--muted);font-size:.8rem;margin-top:2px}
+.day-card small{display:block;color:var(--red);font-size:.66rem;font-weight:700;margin-top:3px;text-transform:uppercase;letter-spacing:.03em}
+.day-card.sel{border-color:var(--cyan-dark);background:var(--cyan-soft)}
+.day-card:disabled{opacity:.45;cursor:not-allowed;background:var(--bg)}
+.chip:disabled{opacity:.45;cursor:not-allowed;text-decoration:line-through}
+.confirm-lines{max-width:460px;margin:14px auto 0;text-align:left}
+.confirm-lines .summary-row b{color:var(--navy);text-align:right;margin-left:16px}
