@@ -3,15 +3,15 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Shop — HVAC Parts, Filters, Thermostats & Small Services | FreshVent</title>
-<meta name="description" content="Shop FreshVent: furnace filters, smart thermostats, HVAC parts and small services, all under $750 CAD. Free service calls in Richmond Hill and Markham.">
+<title>Shop — Parts & Small Services Under $750 | FreshVent</title>
+<meta name="description" content="Shop FreshVent parts and small services: furnace filters, thermostats, igniters, tune-ups and protection plans — all under $750, priced in CAD with 13% HST at checkout.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="assets/css/style.css">
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"HVACBusiness","name":"FreshVent",
-"description":"Smart HVAC services: heating, cooling, maintenance plans and 24/7 emergency service in Richmond Hill, Markham and Toronto.",
+"description":"Smart HVAC services: heating, cooling, protection plans and 24/7 emergency service in Richmond Hill, Markham and Toronto.",
 "email":"freshvent.hvac2@gmail.com","telephone":"+1-905-555-0134","priceRange":"$$",
 "areaServed":[{"@type":"City","name":"Richmond Hill"},{"@type":"City","name":"Markham"},{"@type":"City","name":"Toronto"}],
 "openingHours":"Mo-Su 00:00-24:00","address":{"@type":"PostalAddress","addressLocality":"Richmond Hill","addressRegion":"ON","addressCountry":"CA"}}
@@ -20,20 +20,22 @@
 <body>
 <header class="site-header"><div class="container header-inner">
 <a class="logo" href="index.html"><svg class="logo-mark" viewBox="0 0 48 48" fill="none" stroke="#35C4F3" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M10 38c8-1 12-6 13-14 6 2 9 7 9 12"/><path d="M23 24c0-8 4-14 12-16-1 9-5 14-12 16z" fill="#35C4F3" stroke="none"/><path d="M8 42h32"/></svg><span>Fresh<em>Vent</em></span></a>
-<nav class="main-nav" aria-label="Main"><a href="index.html">Home</a><a href="services.html">Services</a><a href="shop.html" class="active">Shop</a><a href="financing.html">Financing</a><a href="service-area.html">Service Area</a><a href="about.html">About</a><a href="partners.html">Partners</a><a href="contact.html">Contact</a></nav>
+<nav class="main-nav" aria-label="Main"><a href="services.html">Services</a><a href="shop.html" class="active">Shop</a><a href="plans.html">Plans</a><a href="service-area.html">Service Area</a><a href="about.html">About</a><a href="partners.html">Partners</a><a href="contact.html">Contact</a></nav>
 <div class="header-actions">
-<a class="btn phone-cta" href="tel:+19055550134">☎ (905) 555-0134</a>
+<a class="btn phone-cta" href="tel:+19055550134">(905) 555-0134</a>
+<a class="btn book-cta" href="book.html">Book a Repair</a>
 <a class="cart-link" href="cart.html" aria-label="Cart"><svg width="22" height="22" viewBox="0 0 48 48" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="17" cy="41" r="3.4"/><circle cx="37" cy="41" r="3.4"/><path d="M4 5h6l4 26h26l4-19H12"/></svg><span class="cart-count" style="display:none">0</span></a>
 <button class="nav-toggle" aria-label="Menu" aria-expanded="false">☰</button>
 </div></div>
-<nav class="mobile-nav" aria-label="Mobile"><a href="index.html">Home</a><a href="services.html">Services</a><a href="shop.html">Shop</a><a href="financing.html">Financing</a><a href="service-area.html">Service Area</a><a href="about.html">About</a><a href="partners.html">Partners</a><a href="contact.html">Contact</a><a href="book.html">Book a Consultation</a><a href="cart.html">Cart</a></nav></header>
+<nav class="mobile-nav" aria-label="Mobile"><a href="index.html">Home</a><a href="book.html">Book a Repair</a><a href="services.html">Services</a><a href="shop.html">Shop</a><a href="plans.html">Protection Plans</a><a href="service-area.html">Service Area</a><a href="financing.html">Financing</a><a href="about.html">About</a><a href="partners.html">Partners</a><a href="contact.html">Contact</a><a href="cart.html">Cart</a><a href="dashboard.html">Technician Dashboard</a></nav></header>
 <main>
 
-<section class="blueprint" style="padding:52px 0"><div class="container">
-<span class="eyebrow">Shop</span>
+<section class="page-band"><div class="container">
+<div class="eyebrow-line">Shop</div>
 <h1>Parts &amp; small services — all under $750</h1>
-<p class="lead">Order filters, thermostats and parts online, or book a small service. 13% HST calculated at checkout. In-zone service calls are free.</p>
+<p class="lead">Filters, thermostats, parts, tune-ups and protection plans. Prices in CAD; HST at checkout.</p>
 </div></section>
+
 <section class="section"><div class="container">
 <div class="shop-tools">
 <input type="search" id="shopSearch" placeholder="Search products… (e.g. filter, thermostat, tune-up)" aria-label="Search products">
@@ -43,20 +45,21 @@
 <button type="button" class="chip" data-cat="Thermostats">Thermostats</button>
 <button type="button" class="chip" data-cat="Parts">Parts</button>
 <button type="button" class="chip" data-cat="Services">Services</button>
+<button type="button" class="chip" data-cat="Plans">Plans</button>
 </div></div>
 <div class="grid cols-3" id="productGrid"></div>
-<p style="margin-top:22px;color:var(--muted)">Need a full system or a big repair instead? <a href="book.html"><b>Book a consultation</b></a> — replacements are quoted in person, never sold blind online.</p>
+<p style="margin-top:22px;color:var(--muted)">Something bigger — a repair or a new system? <a href="book.html"><b>Book a repair</b></a> and get a flat quote first.</p>
 </div></section>
 
 </main>
 <footer class="site-footer"><div class="container">
 <div class="footer-grid">
-<div><h4>FreshVent</h4><p>Smart HVAC services for Richmond Hill, Markham and Toronto — heating, cooling, maintenance plans and 24/7 emergency help, with transparent pricing and no missed calls.</p></div>
-<div><h4>Quick Links</h4><a href="services.html">Services</a><a href="shop.html">Shop Parts &amp; Services</a><a href="book.html">Book a Consultation</a><a href="financing.html">Financing</a><a href="faq.html">FAQ</a><a href="partners.html">Partners — Join Our Team</a></div>
+<div><h4>FreshVent</h4><p>Heating, cooling, protection plans and 24/7 emergency help for Richmond Hill, Markham and Toronto — booked in a minute, priced up front.</p></div>
+<div><h4>Quick Links</h4><a href="book.html">Book a Repair</a><a href="services.html">Services</a><a href="shop.html">Shop Parts</a><a href="plans.html">Protection Plans</a><a href="financing.html">Financing</a><a href="faq.html">FAQ</a></div>
 <div><h4>Service Area</h4><a href="service-area.html">Richmond Hill — FREE</a><a href="service-area.html">Markham — FREE</a><a href="service-area.html">Toronto — distance fee may apply</a><a href="service-area.html">Check your postal code</a></div>
-<div><h4>Contact</h4><a href="tel:+19055550134">(905) 555-0134</a><a href="mailto:freshvent.hvac2@gmail.com">freshvent.hvac2@gmail.com</a><p style="margin-top:8px">Hours: 24/7 — emergency service<br>around the clock, every day.</p></div>
+<div><h4>Contact</h4><a href="tel:+19055550134">(905) 555-0134</a><a href="mailto:freshvent.hvac2@gmail.com">freshvent.hvac2@gmail.com</a><a href="partners.html">Partners — Join Our Team</a><a href="dashboard.html">Technician Dashboard</a><p style="margin-top:8px">Open 24/7 — every call answered.</p></div>
 </div>
-<div class="footer-bottom"><span>© <span class="js-year">2026</span> FreshVent. All rights reserved.</span><span>Heating · Cooling · Maintenance · 24/7 Emergency</span></div>
+<div class="footer-bottom"><span>© <span class="js-year">2026</span> FreshVent. All rights reserved.</span><span>Heating · Cooling · Plans · 24/7 Emergency</span></div>
 </div></footer>
 <script src="assets/js/zones.js"></script>
 <script src="assets/js/products.js"></script>
