@@ -113,8 +113,16 @@ function fvCartRenderPage() {
       '<a class="btn" href="shop.html">Go to the Shop</a></div>';
   } else {
     wrap.innerHTML = items.map(function (it) {
+      var prod = null;
+      if (typeof FV_PRODUCTS !== 'undefined') {
+        for (var i = 0; i < FV_PRODUCTS.length; i++) {
+          if (FV_PRODUCTS[i].id === it.id) { prod = FV_PRODUCTS[i]; break; }
+        }
+      }
+      var thumb = fvIconSvg(it.icon) +
+        (prod && prod.img ? '<img class="thumb-photo" src="' + prod.img + '" alt="" loading="lazy" onerror="this.remove()">' : '');
       return '<div class="cart-item">' +
-        '<div class="thumb">' + fvIconSvg(it.icon) + '</div>' +
+        '<div class="thumb">' + thumb + '</div>' +
         '<div class="info"><b>' + it.name + '</b><span>' + fvMoney(it.price) + ' each</span></div>' +
         '<div class="qty"><button type="button" data-dec="' + it.id + '" aria-label="Decrease">−</button>' +
         '<input type="text" value="' + it.qty + '" readonly aria-label="Quantity">' +

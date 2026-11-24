@@ -62,7 +62,9 @@ document.addEventListener('DOMContentLoaded', function () {
       });
       grid.innerHTML = list.length ? list.map(function (p) {
         return '<article class="card product-card">' +
-          '<div class="product-art">' + fvIconSvg(p.icon) + '</div>' +
+          '<div class="product-art">' + fvIconSvg(p.icon) +
+          (p.img ? '<img class="product-photo" src="' + p.img + '" alt="" loading="lazy" onerror="this.remove()">' : '') +
+          '</div>' +
           '<div class="product-cat">' + p.category + '</div>' +
           '<h3>' + p.name + '</h3><p>' + p.blurb + '</p>' +
           '<div class="product-price">' + fvMoney(p.price) + ' <small style="font-size:.8rem;color:var(--muted);font-weight:600">CAD</small></div>' +
