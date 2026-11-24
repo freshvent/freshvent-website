@@ -333,20 +333,12 @@ function fvCityForPostal(norm) {
     var postalEl = $('bkPostal');
     var n = fvNormalizePostal(postalEl.value);
     var check = fvCheckPostal(postalEl.value);
-    var area = $('areaFound');
     if (n.valid) {
       var city = fvCityForPostal(n);
       if (city && $('bkCity').value !== city) $('bkCity').value = city;
-      if (area) {
-        area.style.display = 'block';
-        area.innerHTML = check.inZone
-          ? '✓ We found your area: <b>' + (city || 'Your city') + '</b> — in the free zone, no distance fee.'
-          : '✓ We found your area: <b>' + (city || 'Your city') + '</b> — outside the free zone, so a $17.00 distance fee applies.';
-      }
       if (!postalWasValid && !$('bkAddress').value) $('bkAddress').focus();
       postalWasValid = true;
     } else {
-      if (area) area.style.display = 'none';
       postalWasValid = false;
     }
     updateAddressHint();
