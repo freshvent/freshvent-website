@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Book a Consultation or Installation | FreshVent</title>
+<meta name="description" content="Book an HVAC consultation or installation with FreshVent in two minutes: service type, equipment details, nameplate photo, and your preferred time. Richmond Hill, Markham, Toronto.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="assets/css/style.css">
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"HVACBusiness","name":"FreshVent",
+"description":"Smart HVAC services: heating, cooling, maintenance plans and 24/7 emergency service in Richmond Hill, Markham and Toronto.",
+"email":"freshvent.hvac2@gmail.com","telephone":"+1-905-555-0134","priceRange":"$$",
+"areaServed":[{"@type":"City","name":"Richmond Hill"},{"@type":"City","name":"Markham"},{"@type":"City","name":"Toronto"}],
+"openingHours":"Mo-Su 00:00-24:00","address":{"@type":"PostalAddress","addressLocality":"Richmond Hill","addressRegion":"ON","addressCountry":"CA"}}
+</script>
+</head>
+<body>
+<header class="site-header"><div class="container header-inner">
+<a class="logo" href="index.html"><svg class="logo-mark" viewBox="0 0 48 48" fill="none" stroke="#35C4F3" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M10 38c8-1 12-6 13-14 6 2 9 7 9 12"/><path d="M23 24c0-8 4-14 12-16-1 9-5 14-12 16z" fill="#35C4F3" stroke="none"/><path d="M8 42h32"/></svg><span>Fresh<em>Vent</em></span></a>
+<nav class="main-nav" aria-label="Main"><a href="index.html">Home</a><a href="services.html">Services</a><a href="shop.html">Shop</a><a href="financing.html">Financing</a><a href="service-area.html">Service Area</a><a href="about.html">About</a><a href="contact.html">Contact</a></nav>
+<div class="header-actions">
+<a class="btn phone-cta" href="tel:+19055550134">☎ (905) 555-0134</a>
+<a class="cart-link" href="cart.html" aria-label="Cart"><svg width="22" height="22" viewBox="0 0 48 48" fill="none" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><circle cx="17" cy="41" r="3.4"/><circle cx="37" cy="41" r="3.4"/><path d="M4 5h6l4 26h26l4-19H12"/></svg><span class="cart-count" style="display:none">0</span></a>
+<button class="nav-toggle" aria-label="Menu" aria-expanded="false">☰</button>
+</div></div>
+<nav class="mobile-nav" aria-label="Mobile"><a href="index.html">Home</a><a href="services.html">Services</a><a href="shop.html">Shop</a><a href="financing.html">Financing</a><a href="service-area.html">Service Area</a><a href="about.html">About</a><a href="contact.html">Contact</a><a href="book.html">Book a Consultation</a><a href="cart.html">Cart</a></nav></header>
+<main>
+
+<section class="blueprint" style="padding:52px 0"><div class="container">
+<span class="eyebrow">Book a Consultation</span>
+<h1>Smart booking — two minutes, no phone tag</h1>
+<p class="lead">Tell us what you need, add your equipment details and a nameplate photo, and a technician reviews everything before your visit.</p>
+</div></section>
+<section class="section"><div class="container" style="max-width:760px">
+<div class="form-card">
+<div class="progress-wrap">
+<div class="progress-bar"><div class="progress-fill" id="bookProgressFill"></div></div>
+<div class="progress-labels"><span class="on">1 · Service</span><span>2 · Equipment</span><span>3 · Nameplate</span><span>4 · Contact</span><span>5 · Review</span></div>
+</div>
+<!-- TODO: on submit, POST the booking + photo to the production endpoint (Web3Forms/FormSubmit) and the CRM webhook. Currently front-end only. -->
+<form id="bookForm" novalidate>
+
+<div class="book-step active" data-step="1">
+<h2 style="margin-bottom:14px">What do you need?</h2>
+<div class="radio-cards field" id="serviceTypeWrap">
+<label class="radio-card"><input type="radio" name="serviceType" value="Repair — heating"><span><b>Repair — Heating</b><span>Furnace or heating problem that needs fixing.</span></span></label>
+<label class="radio-card"><input type="radio" name="serviceType" value="Repair — cooling"><span><b>Repair — Cooling</b><span>AC not cooling, leaking or making noise.</span></span></label>
+<label class="radio-card"><input type="radio" name="serviceType" value="Replacement / new installation"><span><b>Replacement / New Installation</b><span>New furnace, AC, heat pump or water heater — with a consultation and flat quote.</span></span></label>
+<label class="radio-card"><input type="radio" name="serviceType" value="Maintenance / tune-up"><span><b>Maintenance / Tune-Up</b><span>Annual service, inspection or a maintenance plan.</span></span></label>
+<label class="radio-card"><input type="radio" name="serviceType" value="Emergency — no heat / no cooling"><span><b>Emergency — No Heat / No Cooling</b><span>Urgent. For emergencies, calling is faster: (905) 555-0134 (24/7).</span></span></label>
+<label class="radio-card"><input type="radio" name="serviceType" value="Other / not sure"><span><b>Other / Not Sure</b><span>Describe it in the notes and we'll figure it out together.</span></span></label>
+</div>
+<p class="error" id="serviceTypeError" style="display:none;color:var(--red);font-weight:600">Please choose a service type to continue.</p>
+<div class="book-nav"><span></span><button type="button" class="btn" data-next>Continue →</button></div>
+</div>
+
+<div class="book-step" data-step="2">
+<h2 style="margin-bottom:14px">Your equipment</h2>
+<div class="field"><label for="eqType">Equipment type *</label><select id="eqType"><option value="">Select…</option><option>Furnace</option><option>Air conditioner</option><option>Heat pump</option><option>Boiler</option><option>Water heater</option><option>Ductless mini-split</option><option>Other / don't know</option></select><span class="error">Please select the equipment type.</span></div>
+<div class="field"><label for="eqBrand">Brand *</label><input type="text" id="eqBrand" placeholder="e.g. Carrier, Lennox, Goodman"><span class="error">Please enter the brand (or "unknown").</span></div>
+<div class="field"><label for="eqModel">Model number</label><input type="text" id="eqModel" placeholder="From the nameplate, if handy"><span class="hint">Optional — it's on the nameplate you'll photograph in the next step.</span></div>
+<div class="field"><label for="eqSerial">Serial number</label><input type="text" id="eqSerial" placeholder="Optional"></div>
+<div class="field"><label for="eqAge">Approximate age *</label><select id="eqAge"><option value="">Select…</option><option>Under 5 years</option><option>5–10 years</option><option>10–15 years</option><option>15–20 years</option><option>Over 20 years</option><option>Don't know</option></select><span class="error">Please pick an approximate age.</span></div>
+<div class="book-nav"><button type="button" class="btn dark" data-back>← Back</button><button type="button" class="btn" data-next>Continue →</button></div>
+</div>
+
+<div class="book-step" data-step="3">
+<h2 style="margin-bottom:14px">Nameplate photo</h2>
+<p style="color:var(--muted)">The nameplate (sticker) on your furnace or AC shows the model and serial number. A photo lets the technician identify parts and pricing <b>before</b> arriving — fewer return trips, faster repairs.</p>
+<div class="photo-drop">
+<p style="margin-bottom:12px"><b>Upload a photo of the nameplate</b><br><span style="color:var(--muted)">JPG or PNG. Optional, but strongly recommended.</span></p>
+<input type="file" id="nameplatePhoto" accept="image/*" aria-label="Upload nameplate photo">
+<div class="photo-preview" id="photoPreview"><img id="photoPreviewImg" alt="Preview of your uploaded equipment nameplate photo"><p class="hint">Attached: <span id="photoName"></span></p></div>
+</div>
+<p class="hint" style="margin-top:10px">No photo handy? Continue anyway — you can also text it to us later.</p>
+<div class="book-nav"><button type="button" class="btn dark" data-back>← Back</button><button type="button" class="btn" data-next>Continue →</button></div>
+</div>
+
+<div class="book-step" data-step="4">
+<h2 style="margin-bottom:14px">How do we reach you?</h2>
+<div class="field"><label for="ctName">Full name *</label><input type="text" id="ctName" autocomplete="name"><span class="error">Please enter your name.</span></div>
+<div class="field"><label for="ctEmail">Email *</label><input type="email" id="ctEmail" autocomplete="email"><span class="error">Please enter a valid email address.</span></div>
+<div class="field"><label for="ctPhone">Phone *</label><input type="tel" id="ctPhone" autocomplete="tel" placeholder="(416) 555-0123"><span class="error">Please enter a valid phone number.</span></div>
+<div class="field"><label for="ctAddress">Street address *</label><input type="text" id="ctAddress" autocomplete="street-address"><span class="error">Please enter the service address.</span></div>
+<div class="grid cols-2" style="gap:14px">
+<div class="field"><label for="ctCity">City *</label><input type="text" id="ctCity" autocomplete="address-level2"><span class="error">Please enter the city.</span></div>
+<div class="field"><label for="ctPostal">Postal code *</label><input type="text" id="ctPostal" autocomplete="postal-code" placeholder="L4C 1A1" style="text-transform:uppercase"><span class="error">Please enter a valid postal code.</span></div>
+</div>
+<div class="grid cols-2" style="gap:14px">
+<div class="field"><label for="ctDate">Preferred date *</label><input type="date" id="ctDate"><span class="error">Please pick a preferred date.</span></div>
+<div class="field"><label for="ctTime">Preferred time *</label><select id="ctTime"><option value="">Select…</option><option>Morning (8–12)</option><option>Afternoon (12–4)</option><option>Evening (4–8)</option><option>As soon as possible</option></select><span class="error">Please pick a time window.</span></div>
+</div>
+<div class="field"><label for="ctNotes">Anything else we should know?</label><textarea id="ctNotes" rows="3" placeholder="Access notes, symptoms, pets, parking…"></textarea></div>
+<div class="book-nav"><button type="button" class="btn dark" data-back>← Back</button><button type="button" class="btn" data-next>Review →</button></div>
+</div>
+
+<div class="book-step" data-step="5">
+<h2 style="margin-bottom:14px">Review &amp; submit</h2>
+<dl class="review-list" id="reviewList"></dl>
+<img id="reviewPhoto" alt="Your equipment nameplate photo" style="display:none;max-height:200px;border-radius:10px;border:1px solid var(--line);margin-top:14px">
+<p class="hint" style="margin-top:14px">Submitting sends this request to the FreshVent team. A technician reviews your equipment details before confirming your visit window.</p>
+<div class="book-nav"><button type="button" class="btn dark" data-back>← Back</button><button type="submit" class="btn">Submit Request ✓</button></div>
+</div>
+
+<div id="bookSuccess" style="display:none">
+<div class="success-box">
+<div class="tick"><svg viewBox="0 0 48 48" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><path d="M9 25l11 11L39 14"/></svg></div>
+<h2>Request received!</h2>
+<p>Your booking reference is <b id="bookingRef">FV-000000</b>.<br><span id="bookingSuccessSummary"></span></p>
+<p style="color:var(--muted)">We'll confirm your visit window by phone and email shortly. For anything urgent, call <a href="tel:+19055550134"><b>(905) 555-0134</b></a> — answered 24/7.</p>
+<a class="btn dark" href="index.html">Back to Home</a>
+</div></div>
+
+</form>
+</div>
+</div></section>
+
+</main>
+<footer class="site-footer"><div class="container">
+<div class="footer-grid">
+<div><h4>FreshVent</h4><p>Smart HVAC services for Richmond Hill, Markham and Toronto — heating, cooling, maintenance plans and 24/7 emergency help, with transparent pricing and no missed calls.</p></div>
+<div><h4>Quick Links</h4><a href="services.html">Services</a><a href="shop.html">Shop Parts &amp; Services</a><a href="book.html">Book a Consultation</a><a href="financing.html">Financing</a><a href="faq.html">FAQ</a></div>
+<div><h4>Service Area</h4><a href="service-area.html">Richmond Hill — FREE</a><a href="service-area.html">Markham — FREE</a><a href="service-area.html">Toronto — distance fee may apply</a><a href="service-area.html">Check your postal code</a></div>
+<div><h4>Contact</h4><a href="tel:+19055550134">(905) 555-0134</a><a href="mailto:freshvent.hvac2@gmail.com">freshvent.hvac2@gmail.com</a><p style="margin-top:8px">Hours: 24/7 — emergency service<br>around the clock, every day.</p></div>
+</div>
+<div class="footer-bottom"><span>© <span class="js-year">2026</span> FreshVent. All rights reserved.</span><span>Heating · Cooling · Maintenance · 24/7 Emergency</span></div>
+</div></footer>
+<script src="assets/js/zones.js"></script>
+<script src="assets/js/products.js"></script>
+<script src="assets/js/cart.js"></script>
+<script src="assets/js/main.js"></script>
+<script src="assets/js/book.js"></script>
+</body>
+</html>
