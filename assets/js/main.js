@@ -143,4 +143,16 @@ document.addEventListener('DOMContentLoaded', function () {
       cform.reset();
     });
   }
+
+  /* ---------- partner application form (front-end only) ---------- */
+  var pform = document.getElementById('partnerForm');
+  if (pform) {
+    pform.addEventListener('submit', function (e) {
+      e.preventDefault();
+      /* TODO: wire this form to the production endpoint (Web3Forms/FormSubmit) + CRM */
+      var ok = document.getElementById('partnerSuccess');
+      if (ok) { ok.style.display = 'block'; ok.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+      pform.reset();
+    });
+  }
 });
