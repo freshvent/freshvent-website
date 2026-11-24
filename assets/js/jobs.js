@@ -59,3 +59,68 @@ function fvJobById(id) {
   for (var i = 0; i < FV_JOBS.length; i++) if (FV_JOBS[i].id === id) return FV_JOBS[i];
   return null;
 }
+
+/* ============================================================
+   Demo technician availability — used by the booking calendar.
+   Keyed by technician name (same names as the booking pool),
+   then by weekday (0 = Sunday … 6 = Saturday).
+   A day is either 'full' (fully booked — no slots at all) or
+   a list of slots; a slot with taken:true is already booked.
+   TODO: replace with live availability from the dispatch
+   engine / technician calendars when the backend goes live.
+   ============================================================ */
+function fvSlot(label, taken) { return { label: label, taken: !!taken }; }
+
+var FV_AVAILABILITY = {
+  'Alex R.': {
+    0: 'full',
+    1: [fvSlot('8–10 am'), fvSlot('10 am–12 pm', true), fvSlot('12–2 pm'), fvSlot('2–4 pm', true), fvSlot('4–6 pm')],
+    2: 'full',
+    3: [fvSlot('8–10 am'), fvSlot('10 am–12 pm'), fvSlot('12–2 pm', true), fvSlot('2–4 pm'), fvSlot('4–6 pm', true), fvSlot('6–8 pm')],
+    4: [fvSlot('8–10 am', true), fvSlot('10 am–12 pm'), fvSlot('2–4 pm'), fvSlot('4–6 pm')],
+    5: 'full',
+    6: [fvSlot('8–10 am'), fvSlot('10 am–12 pm', true), fvSlot('12–2 pm'), fvSlot('2–4 pm')]
+  },
+  'Sam K.': {
+    0: [fvSlot('10 am–12 pm'), fvSlot('12–2 pm')],
+    1: 'full',
+    2: [fvSlot('8–10 am'), fvSlot('10 am–12 pm', true), fvSlot('2–4 pm'), fvSlot('4–6 pm')],
+    3: [fvSlot('8–10 am', true), fvSlot('10 am–12 pm'), fvSlot('12–2 pm')],
+    4: 'full',
+    5: [fvSlot('8–10 am'), fvSlot('10 am–12 pm'), fvSlot('12–2 pm', true), fvSlot('2–4 pm'), fvSlot('6–8 pm')],
+    6: 'full'
+  },
+  'Jordan M.': {
+    0: [fvSlot('8–10 am'), fvSlot('2–4 pm')],
+    1: [fvSlot('8–10 am'), fvSlot('10 am–12 pm', true), fvSlot('12–2 pm'), fvSlot('4–6 pm')],
+    2: [fvSlot('10 am–12 pm'), fvSlot('12–2 pm', true), fvSlot('2–4 pm')],
+    3: 'full',
+    4: [fvSlot('8–10 am', true), fvSlot('10 am–12 pm'), fvSlot('2–4 pm'), fvSlot('6–8 pm')],
+    5: [fvSlot('8–10 am'), fvSlot('10 am–12 pm'), fvSlot('12–2 pm')],
+    6: [fvSlot('10 am–12 pm', true), fvSlot('12–2 pm'), fvSlot('4–6 pm')]
+  },
+  'Priya D.': {
+    0: 'full',
+    1: [fvSlot('10 am–12 pm'), fvSlot('2–4 pm'), fvSlot('4–6 pm', true)],
+    2: [fvSlot('8–10 am'), fvSlot('10 am–12 pm'), fvSlot('12–2 pm')],
+    3: [fvSlot('8–10 am'), fvSlot('12–2 pm', true), fvSlot('4–6 pm')],
+    4: 'full',
+    5: [fvSlot('8–10 am', true), fvSlot('10 am–12 pm'), fvSlot('2–4 pm')],
+    6: [fvSlot('8–10 am'), fvSlot('12–2 pm')]
+  }
+};
+
+/* Availability for one technician on one weekday:
+   returns { full:true, slots:[] } when the day is fully booked,
+   otherwise { full:false, slots:[{label, taken}, …] }. */
+function fvTechDay(techName, weekday) {
+  var map = FV_AVAILABILITY[techName];
+  var day = map ? map[weekday] : null;
+  if (!day || day === 'full' || !day.length) return { full: true, slots: [] };
+  return { full: false, slots: day };
+}
+
+/* Just the still-bookable slots for a technician/weekday */
+function fvFreeSlots(techName, weekday) {
+  return fvTechDay(techName, weekday).slots.filter(function (s) { return !s.taken; });
+}
