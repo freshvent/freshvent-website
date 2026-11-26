@@ -80,11 +80,11 @@
 
 <div class="book-step" data-step="2">
 <h2 style="margin-bottom:14px">Where &amp; when?</h2>
+<div class="field"><label for="bkAddress">Street address *</label><input type="text" id="bkAddress" autocomplete="street-address" placeholder="123 Bayview Ave"><span class="hint" id="addressHint">Start typing your street — pick your address from the list and the city and postal code fill in automatically.</span><span class="error">Please enter the service address.</span></div>
+<div class="grid cols-2" style="gap:14px">
+<div class="field"><label for="bkCity">City *</label><input type="text" id="bkCity" autocomplete="address-level2" placeholder="Richmond Hill"><span class="error">Please enter your city.</span></div>
 <div class="field"><label for="bkPostal">Postal code *</label><input type="text" id="bkPostal" autocomplete="postal-code" placeholder="L4C 1A1" style="text-transform:uppercase"><span class="error">Please enter a valid postal code.</span>
 <p class="area-found" id="areaFound" style="display:none"></p></div>
-<div class="grid cols-2" style="gap:14px">
-<div class="field"><label for="bkCity">City *</label><select id="bkCity"><option value="">Select…</option><option>Richmond Hill</option><option>Markham</option><option>Toronto</option><option>Vaughan</option><option>Scarborough</option><option>North York</option><option>Other</option></select><span class="error">Please pick your city.</span></div>
-<div class="field"><label for="bkAddress">Street address *</label><input type="text" id="bkAddress" autocomplete="street-address" placeholder="123 Bayview Ave"><span class="hint" id="addressHint">Start typing your street — pick your address from the list and the city and postal code fill in automatically.</span><span class="error">Please enter the service address.</span></div>
 </div>
 
 <div class="field" style="margin-top:6px"><label>Pick a day &amp; time *</label>
@@ -192,8 +192,6 @@
     var city = a.city || a.town || a.village || a.municipality || '';
     var cityEl = document.getElementById('bkCity');
     if (cityEl && city) {
-      var found = Array.prototype.some.call(cityEl.options, function (o) { return o.value === city || o.text === city; });
-      if (!found) { var opt = document.createElement('option'); opt.value = city; opt.text = city; cityEl.appendChild(opt); }
       cityEl.value = city;
       cityEl.dispatchEvent(new Event('change'));
     }
