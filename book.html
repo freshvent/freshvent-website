@@ -164,31 +164,33 @@
 <script src="assets/js/main.js"></script>
 <script src="assets/js/jobs.js"></script>
 <script src="assets/js/book.js"></script>
-<!-- Google Places address autocomplete (free up to 10,000 lookups/mo).
-     To turn it on, replace YOUR_GOOGLE_PLACES_API_KEY below with a real key
-     restricted to freshvent.github.io. Without a key this script simply does
-     nothing and the form keeps its existing postal-code -> city fallback. -->
+<!-- Free address autocomplete via Nominatim (OpenStreetMap): no API key, no card.
+     The customer types their street, picks a suggestion, and street/city/postal
+     fill in automatically. Kept to 1 request per keystroke burst (debounced) per
+     Nominatim usage policy. If the service is unreachable, the form keeps its
+     existing postal-code -> city fallback. -->
+<style>
+.addr-suggest{position:absolute;z-index:50;background:#fff;border:1px solid #cbd5e1;border-radius:10px;box-shadow:0 8px 24px rgba(15,42,68,.15);max-height:220px;overflow:auto}
+.addr-suggest button{display:block;width:100%;text-align:left;background:none;border:0;padding:10px 12px;font:inherit;cursor:pointer}
+.addr-suggest button:hover,.addr-suggest button:focus{background:#eef6fb}
+</style>
 <script>
-window.fvInitPlaces = function () {
-  if (!window.google || !google.maps || !google.maps.places) return;
+(function () {
   var addr = document.getElementById('bkAddress');
   if (!addr) return;
-  var ac = new google.maps.places.Autocomplete(addr, {
-    types: ['address'],
-    componentRestrictions: { country: 'ca' },
-    fields: ['address_components', 'formatted_address']
-  });
-  ac.addListener('place_changed', function () {
-    var place = ac.getPlace();
-    if (!place || !place.address_components) return;
-    var comp = {};
-    place.address_components.forEach(function (c) {
-      c.types.forEach(function (t) { comp[t] = c.long_name; });
-    });
-    var street = [comp.street_number, comp.route].filter(Boolean).join(' ');
+  var box = document.createElement('div');
+  box.className = 'addr-suggest';
+  box.style.display = 'none';
+  addr.parentNode.style.position = 'relative';
+  addr.parentNode.appendChild(box);
+  var timer = null, lastQ = '';
+  function hide() { box.style.display = 'none'; box.innerHTML = ''; }
+  function fill(item) {
+    var a = item.address || {};
+    var street = [a.house_number, a.road].filter(Boolean).join(' ');
     if (street) addr.value = street;
+    var city = a.city || a.town || a.village || a.municipality || '';
     var cityEl = document.getElementById('bkCity');
-    var city = comp.locality || comp.sublocality || '';
     if (cityEl && city) {
       var found = Array.prototype.some.call(cityEl.options, function (o) { return o.value === city || o.text === city; });
       if (!found) { var opt = document.createElement('option'); opt.value = city; opt.text = city; cityEl.appendChild(opt); }
@@ -196,14 +198,41 @@ window.fvInitPlaces = function () {
       cityEl.dispatchEvent(new Event('change'));
     }
     var postalEl = document.getElementById('bkPostal');
-    if (postalEl && comp.postal_code) {
-      postalEl.value = comp.postal_code;
+    if (postalEl && a.postcode) {
+      postalEl.value = a.postcode;
       postalEl.dispatchEvent(new Event('input'));
     }
+    hide();
+    addr.focus();
+  }
+  addr.addEventListener('input', function () {
+    var q = addr.value.trim();
+    if (q.length < 4) { hide(); return; }
+    clearTimeout(timer);
+    timer = setTimeout(function () {
+      if (q === lastQ) return;
+      lastQ = q;
+      fetch('https://nominatim.openstreetmap.org/search?format=json&addressdetails=1&countrycodes=ca&limit=5&q=' + encodeURIComponent(q), { headers: { 'Accept': 'application/json' } })
+        .then(function (r) { return r.json(); })
+        .then(function (list) {
+          if (!list || !list.length) { hide(); return; }
+          box.innerHTML = '';
+          list.forEach(function (item) {
+            var b = document.createElement('button');
+            b.type = 'button';
+            b.textContent = item.display_name;
+            b.addEventListener('click', function () { fill(item); });
+            box.appendChild(b);
+          });
+          box.style.display = 'block';
+        })
+        .catch(function () { hide(); });
+    }, 400);
   });
-};
+  document.addEventListener('click', function (e) { if (!addr.parentNode.contains(e.target)) hide(); });
+})();
 </script>
-<script async defer src="https://maps.googleapis.com/maps/api/js?key=YOUR_GOOGLE_PLACES_API_KEY&libraries=places&callback=fvInitPlaces"></script>
+
 
 </body>
 </html>
