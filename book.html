@@ -196,7 +196,11 @@
       cityEl.dispatchEvent(new Event('change'));
     }
     var postalEl = document.getElementById('bkPostal');
-    if (postalEl && a.postcode) {
+    // Only fill the postal code from the suggestion if the customer has not
+    // already typed one: the free service only knows the road, not the exact
+    // house, so its postal code belongs to a stretch of the road and can be
+    // wrong for a specific house number. A typed postal code always wins.
+    if (postalEl && a.postcode && !postalEl.value.trim()) {
       postalEl.value = a.postcode;
       postalEl.dispatchEvent(new Event('input'));
     }
