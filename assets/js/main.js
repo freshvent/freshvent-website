@@ -107,7 +107,7 @@ document.addEventListener('DOMContentLoaded', function () {
           result.textContent = 'Please enter a valid Canadian postal code (e.g., L4C 1A1).';
         } else if (check.inZone) {
           result.classList.add('ok');
-          result.textContent = 'Good news — ' + check.pretty + ' is inside our free service zone (Richmond Hill / Markham). No distance fee applies.';
+          result.textContent = 'Good news — ' + check.pretty + ' is inside our free service zone (Richmond Hill / Markham / Toronto). No distance fee applies.';
         } else {
           result.classList.add('fee');
           result.textContent = check.pretty + ' is outside the free zone. A distance fee of $17.00/hr will be added to your cart automatically.';

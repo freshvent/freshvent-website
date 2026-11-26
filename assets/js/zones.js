@@ -1,6 +1,7 @@
 /* ============================================================
    FreshVent — service zones & distance-fee logic
-   In-zone (Richmond Hill & Markham FSAs) = FREE service call.
+   In-zone (Richmond Hill, Markham & Toronto FSAs) = FREE service call.
+   Toronto = any postal code starting with M.
    Out-of-zone = $17.00/hr distance fee, added in the cart.
    To edit the zone: add/remove FSA prefixes in FV_IN_ZONE_FSAS.
    ============================================================ */
@@ -31,7 +32,7 @@ function fvNormalizePostal(raw) {
 function fvCheckPostal(raw) {
   var n = fvNormalizePostal(raw);
   if (!n.valid) return { valid: false, inZone: false, fsa: '', pretty: '', fee: 0 };
-  var inZone = FV_IN_ZONE_FSAS.indexOf(n.fsa) !== -1;
+  var inZone = FV_IN_ZONE_FSAS.indexOf(n.fsa) !== -1 || n.fsa.charAt(0) === 'M'; /* Toronto M-codes are free */
   return {
     valid: true,
     inZone: inZone,
@@ -42,17 +43,17 @@ function fvCheckPostal(raw) {
 }
 
 /* ---- v2: three-state status for the checker widgets ----
-   'free'     → inside the Richmond Hill / Markham free zone
+   'free'     → inside the Richmond Hill / Markham / Toronto free zone
    'fee'      → served GTA area, $17/hr distance fee applies
    'waitlist' → a real postal code, but not a city we serve yet  */
 var FV_FEE_AREA_FSAS = ['L4A', 'L4G', 'L4H', 'L7B']; /* Stouffville, Aurora, Vaughan, King City */
 function fvZoneStatus(raw) {
   var n = fvNormalizePostal(raw);
   if (!n.valid) return { valid: false, status: 'invalid', fsa: '', pretty: '', fee: 0 };
-  if (FV_IN_ZONE_FSAS.indexOf(n.fsa) !== -1) {
+  if (FV_IN_ZONE_FSAS.indexOf(n.fsa) !== -1 || n.fsa.charAt(0) === 'M') {
     return { valid: true, status: 'free', fsa: n.fsa, pretty: n.pretty, fee: 0 };
   }
-  var servedGta = n.fsa.charAt(0) === 'M' || FV_FEE_AREA_FSAS.indexOf(n.fsa) !== -1;
+  var servedGta = FV_FEE_AREA_FSAS.indexOf(n.fsa) !== -1;
   if (servedGta) {
     return { valid: true, status: 'fee', fsa: n.fsa, pretty: n.pretty, fee: FV_DISTANCE_FEE_PER_HOUR };
   }
