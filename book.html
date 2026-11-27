@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" type="image/png" href="assets/img/freshvent-emblem.png">
 <title>Book a Free Consultation | FreshVent</title>
 <meta name="description" content="Leave your details and FreshVent will call you to confirm your booking and estimate. No payment, no date to pick now — a technician calls you first.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -18,11 +19,10 @@
 </script>
 </head>
 <body>
-<!-- PREVIEW ONLY — lead-capture form for review. Not pushed to GitHub, not live.
      Lead model: we collect information first, then CALL the customer to confirm
      the booking and the estimate. No instant price, no date picking, no payment. -->
 <header class="site-header"><div class="container header-inner">
-<a class="logo" href="index.html"><svg class="logo-mark" viewBox="0 0 48 48" fill="none" stroke="#35C4F3" stroke-width="3" stroke-linecap="round" aria-hidden="true"><path d="M10 38c8-1 12-6 13-14 6 2 9 7 9 12"/><path d="M23 24c0-8 4-14 12-16-1 9-5 14-12 16z" fill="#35C4F3" stroke="none"/><path d="M8 42h32"/></svg><span>Fresh<em>Vent</em></span></a>
+<a class="logo" href="index.html"><img class="logo-mark" src="assets/img/freshvent-emblem.png" alt="FreshVent logo"><span>Fresh<em>Vent</em></span></a>
 <nav class="main-nav" aria-label="Main"><a href="services.html">Services</a><a href="shop.html">Shop</a><a href="plans.html">Plans</a><a href="service-area.html">Service Area</a><a href="about.html">About</a><a href="partners.html">Partners</a><a href="contact.html">Contact</a><a href="book.html" class="nav-cta">Free Consultation</a></nav>
 <div class="header-actions">
 <a class="btn phone-cta" href="tel:+19055550134">(905) 555-0134</a>
@@ -45,7 +45,7 @@
 <div class="progress-labels"><span class="on">1 · Your details</span><span>2 · Your home &amp; problem</span><span>3 · Best time to call</span></div>
 </div>
 <!-- WORDPRESS STEP: on submit, POST this lead to FluentCRM (or QuoteIQ) instead of
-     localStorage — e.g. Fluent Forms with the FluentCRM feed, or a QuoteIQ web lead.
+     localStorage — e.g. Fluent Forms with the FluentCRM feed, or a QuoteIQ web lead. Photos from ldPhotos attach to the lead on submit.
      Keep the same field names. Do not add a price, date picker or payment step. -->
 <form id="leadForm" novalidate>
 
@@ -69,6 +69,8 @@
 <div class="field"><label for="ldAppliance">Appliance *</label><select id="ldAppliance"><option value="">Select…</option><option>Furnace / Boiler</option><option>Air Conditioner</option><option>Heat Pump</option><option>Water Heater</option><option>Thermostat</option><option>Something else</option></select><span class="error">Please pick the appliance.</span></div>
 </div>
 <div class="field"><label for="ldProblem">Describe the problem *</label><textarea id="ldProblem" rows="3" placeholder="e.g. The furnace runs but the house stays cold, and there is a rattling noise"></textarea><span class="error">Please describe the problem in a few words.</span></div>
+<div class="field"><label for="ldPhotos">Photos of your system (optional — add as many as you like)</label><input type="file" id="ldPhotos" accept="image/*" multiple><span class="hint">Photos of your furnace, AC or nameplate help us give you a better estimate when we call.</span><div id="ldPhotoPreview" style="display:flex;flex-wrap:wrap;gap:8px;margin-top:8px"></div></div>
+
 <div class="field"><label for="ldAddress">Street address *</label><input type="text" id="ldAddress" autocomplete="street-address" placeholder="123 Bayview Ave"><span class="hint">Start typing your street — pick your address from the list and the city and postal code fill in automatically.</span><span class="error">Please enter the service address.</span></div>
 <div class="grid cols-2" style="gap:14px">
 <div class="field"><label for="ldCity">City *</label><input type="text" id="ldCity" autocomplete="address-level2" placeholder="Richmond Hill"><span class="error">Please enter your city.</span></div>
@@ -284,6 +286,31 @@
     });
   }
 
+  /* ---- Photos: preview as many as the customer adds ---- */
+  var photoInput = $('ldPhotos'), photoPreview = $('ldPhotoPreview'), photoFiles = [];
+  if (photoInput) photoInput.addEventListener('change', function () {
+    photoFiles = photoFiles.concat(Array.prototype.slice.call(photoInput.files));
+    renderPhotos();
+    photoInput.value = '';
+  });
+  function renderPhotos() {
+    photoPreview.innerHTML = '';
+    photoFiles.forEach(function (f, i) {
+      var wrap = document.createElement('div');
+      wrap.style.cssText = 'position:relative;width:76px;height:76px';
+      var img = document.createElement('img');
+      img.src = URL.createObjectURL(f);
+      img.alt = f.name;
+      img.style.cssText = 'width:76px;height:76px;object-fit:cover;border-radius:8px';
+      var x = document.createElement('button');
+      x.type = 'button'; x.textContent = '×'; x.setAttribute('aria-label', 'Remove photo');
+      x.style.cssText = 'position:absolute;top:-6px;right:-6px;width:20px;height:20px;border-radius:50%;border:none;background:#0F2A44;color:#fff;cursor:pointer;line-height:1';
+      x.addEventListener('click', function () { photoFiles.splice(i, 1); renderPhotos(); });
+      wrap.appendChild(img); wrap.appendChild(x);
+      photoPreview.appendChild(wrap);
+    });
+  }
+
   /* ---- Submit: demo localStorage only (see the WordPress comment at the top) ---- */
   form.addEventListener('submit', function (e) {
     e.preventDefault();
@@ -296,6 +323,7 @@
       service: $('ldService').value,
       appliance: $('ldAppliance').value,
       problem: $('ldProblem').value.trim(),
+      photos: photoFiles.map(function (f) { return f.name; }),
       address: $('ldAddress').value.trim(),
       city: $('ldCity').value.trim(),
       postal: $('ldPostal').value.trim().toUpperCase(),
