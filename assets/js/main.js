@@ -151,6 +151,7 @@ document.addEventListener('DOMContentLoaded', function () {
       var done = document.getElementById('checkoutDone');
       var totals = fvCartTotals();
       if (done) {
+        done.classList.add('ok');
         done.style.display = 'block';
         done.querySelector('[data-order-total]').textContent = fvMoney(totals.total);
         done.scrollIntoView({ behavior: 'smooth', block: 'center' });
@@ -168,7 +169,7 @@ document.addEventListener('DOMContentLoaded', function () {
       e.preventDefault();
       /* TODO: wire this form to the production endpoint (Web3Forms/FormSubmit) + CRM. */
       var ok = document.getElementById(successId);
-      if (ok) { ok.style.display = 'block'; ok.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+      if (ok) { ok.classList.add('ok'); ok.style.display = 'block'; ok.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
       f.reset();
     });
   }
