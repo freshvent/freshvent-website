@@ -110,7 +110,7 @@ document.addEventListener('DOMContentLoaded', function () {
           result.textContent = 'Good news — ' + check.pretty + ' is inside our free service zone (Richmond Hill / Markham / Toronto). No distance fee applies.';
         } else {
           result.classList.add('fee');
-          result.textContent = check.pretty + ' is outside the free zone. A distance fee of $17.00/hr will be added to your cart automatically.';
+          result.textContent = check.pretty + ' is outside the free zone. A distance fee may apply in the wider GTA — we will confirm your exact final quote by phone.';
         }
         return;
       }
@@ -123,7 +123,7 @@ document.addEventListener('DOMContentLoaded', function () {
         result.textContent = 'Good news — ' + st.pretty + ' is in our free zone. No distance fee, ever.';
       } else if (st.status === 'fee') {
         result.classList.add('fee');
-        result.textContent = 'We serve ' + st.pretty + ' — a $17.00/hr distance fee applies and is always shown before you pay.';
+        result.textContent = 'We serve ' + st.pretty + ' — a distance fee may apply in the wider GTA, and your exact final quote is given privately by phone.';
       } else {
         result.classList.add('fee');
         result.innerHTML = 'We don\'t serve ' + st.pretty + ' yet — we\'re expanding city by city. ' +
